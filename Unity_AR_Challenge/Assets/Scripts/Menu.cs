@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public class Menu : MonoBehaviour
 {
-    public List<ModelPreview> modelPreviewList = new List<ModelPreview>();
+    public List<ModelThumbnail> modelPreviewList = new List<ModelThumbnail>();
     public TMP_InputField searchBar;
 
     public TextMeshProUGUI pageText;
@@ -60,7 +60,7 @@ public class Menu : MonoBehaviour
     {
         var count = 1;
 
-        foreach (ModelPreview modelPreview in modelPreviewList)
+        foreach (ModelThumbnail modelPreview in modelPreviewList)
         {
             if ((count + (page * 6)) <= searchResults.Count-1)
             {

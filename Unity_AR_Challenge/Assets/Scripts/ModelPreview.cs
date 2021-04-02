@@ -4,47 +4,33 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class ModelPreview : MonoBehaviour
 {
-    public GameObject modelPreview;
+    private PolyAsset polyModel;
 
-    public Texture2D modelPreviewTexture;
-    public bool isEmpty;
-    public PolyAsset polyModel;
+    public TextMeshProUGUI modelName;
+    public TextMeshProUGUI author; 
+    public TextMeshProUGUI complexity;
+    public TextMeshProUGUI dateAdded; 
+    public TextMeshProUGUI lastEdit;
+    public RawImage modelThumbnail;
 
-    private RawImage modelThumbnail;
-    private TextMeshProUGUI modelName;
-    private TextMeshProUGUI modelAuthor;
+    public GameObject modelContainer;
+    public GameObject menu;
 
-    void Start()
-    {
-        modelThumbnail = GetComponent<RawImage>();
-        modelName = transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-        modelAuthor = transform.GetChild(1).gameObject.GetComponent<TextMeshProUGUI>();
-        SetEmpty();
-    }
-
-    private void Update()
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            print("Click");
-            print(modelName.text);
-        }
-    }
-
-    public void SetPolyModel(PolyAsset pa)
+    public void Initialize(PolyAsset pa)
     {
         polyModel = pa;
 
-        modelName.SetText(polyModel.displayName);
-        modelAuthor.SetText(polyModel.authorName);
-        PolyApi.FetchThumbnail(polyModel, SetThumbnail);
+        modelName.SetText(pa.displayName);
+        author.SetText(pa.authorName);
+        complexity.SetText("Tris: " + pa.formats[0].formatComplexity.triangleCount.ToString());
+        dateAdded.SetText("Created at: " + pa.createTime.ToShortDateString());
+        lastEdit.SetText("Last edited: " + pa.updateTime.ToShortDateString());
 
-        SetFilled();
+        PolyApi.FetchThumbnail(pa, SetThumbnail);
     }
 
     private void SetThumbnail(PolyAsset asset, PolyStatus status)
@@ -58,21 +44,23 @@ public class ModelPreview : MonoBehaviour
         modelThumbnail.texture = asset.thumbnailTexture;
     }
 
-    private void SetFilled()
+    public void _OnAddModelToScene()
     {
-        isEmpty = false;
-        modelThumbnail.color = new Color(255, 255, 255, 255);
+        PolyApi.Import(polyModel, PolyImportOptions.Default(), AddModel);
     }
 
-    public void SetEmpty()
+    private void AddModel(PolyAsset asset, PolyStatusOr<PolyImportResult> result)
     {
-        isEmpty = true;
-        modelThumbnail.color = new Color(255, 255, 255, 0);
-        modelThumbnail.texture = null;
+        if (!result.Ok)
+        {
+            // Handle error.
+            return;
+        }
 
-        modelName.SetText("");
-        modelAuthor.SetText("");
+        //   GameObject model = Instantiate(result.Value.gameObject);
+        //   model.transform.SetParent(modelContainer.transform);
+        result.Value.gameObject.transform.SetParent(modelContainer.transform);
+        menu.SetActive(false);
+        transform.gameObject.SetActive(false);
     }
-
-
 }
