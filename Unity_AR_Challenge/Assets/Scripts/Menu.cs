@@ -112,6 +112,11 @@ public class Menu : MonoBehaviour
         filterMenu.SetActive(true);
     }
 
+    public void _OnOpenMenu()
+    {
+        transform.gameObject.SetActive(true);
+    }
+
     //Filters
     public void _OnConfirm()
     {
