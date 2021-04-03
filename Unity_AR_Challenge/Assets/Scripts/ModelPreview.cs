@@ -20,6 +20,8 @@ public class ModelPreview : MonoBehaviour
     public GameObject modelContainer;
     public GameObject menu;
     public Controller controller;
+    public ModelManager modelManager;
+   
 
     public void Initialize(PolyAsset pa)
     {
@@ -58,10 +60,8 @@ public class ModelPreview : MonoBehaviour
             return;
         }
 
-        result.Value.gameObject.transform.SetParent(modelContainer.transform);
+        modelManager.AddModel(result.Value.gameObject);
         menu.SetActive(false);
         transform.gameObject.SetActive(false);
-
-        controller.SelectModel(result.Value.gameObject);
     }
 }
