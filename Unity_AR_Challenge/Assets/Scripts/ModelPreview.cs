@@ -21,7 +21,8 @@ public class ModelPreview : MonoBehaviour
     public GameObject menu;
     public Controller controller;
     public ModelManager modelManager;
-   
+
+
 
     public void Initialize(PolyAsset pa)
     {
@@ -34,6 +35,14 @@ public class ModelPreview : MonoBehaviour
         lastEdit.SetText("Last edited: " + pa.updateTime.ToShortDateString());
 
         PolyApi.FetchThumbnail(pa, SetThumbnail);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            print("Back!");
+        }
     }
 
     private void SetThumbnail(PolyAsset asset, PolyStatus status)
@@ -60,7 +69,7 @@ public class ModelPreview : MonoBehaviour
             return;
         }
 
-        modelManager.AddModel(result.Value.gameObject);
+        modelManager.AddModel(result, asset);
         menu.SetActive(false);
         transform.gameObject.SetActive(false);
     }

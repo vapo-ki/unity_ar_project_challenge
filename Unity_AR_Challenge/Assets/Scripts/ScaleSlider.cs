@@ -27,6 +27,5 @@ public class ScaleSlider : MonoBehaviour
                 controller.ScaleModel(touch.deltaPosition.y);
             }
         }
-
     }
 }

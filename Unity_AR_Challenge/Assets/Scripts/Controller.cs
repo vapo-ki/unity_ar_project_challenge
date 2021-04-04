@@ -39,5 +39,4 @@ public class Controller : MonoBehaviour
             selectedModel.transform.localScale = new Vector3(scaleVector.x + scale, scaleVector.y + scale, scaleVector.z + scale);
         }
     }
-
 }

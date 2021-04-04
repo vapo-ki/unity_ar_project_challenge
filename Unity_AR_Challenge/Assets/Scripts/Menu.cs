@@ -58,7 +58,7 @@ public class Menu : MonoBehaviour
 
     private void Refresh()
     {
-        var count = 1;
+        var count = 0;
 
         foreach (ModelThumbnail modelPreview in modelPreviewList)
         {

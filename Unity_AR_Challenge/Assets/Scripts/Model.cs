@@ -11,6 +11,7 @@ public class Model : MonoBehaviour
     public PolyAsset polyAsset;
     public Material selectedMaterial;
     public ModelManager modelManager;
+    public string id;
 
     private bool isSelected;
 
@@ -32,12 +33,12 @@ public class Model : MonoBehaviour
         GetComponent<MeshRenderer>().materials = materialList;
     }
 
-    void OnMouseDown()
+    private void OnMouseUp()
     {
-        if (EventSystem.current.IsPointerOverGameObject()) {
-            print("Touched! " + gameObject.name);
+        if (EventSystem.current.IsPointerOverGameObject(0) == false)
+        {
             modelManager.SelectModel(gameObject);
         }
-        
     }
+
 }

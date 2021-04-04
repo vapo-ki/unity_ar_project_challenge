@@ -6,16 +6,20 @@ using UnityEngine.UI;
 public class ModelThumbnail : MonoBehaviour
 {
     public GameObject modelPreview;
+    public ModelManager modelManager;
 
     public Texture2D modelPreviewTexture;
     public bool isEmpty;
-    public PolyAsset polyModel;
+    public PolyAsset polyAsset;
+    public GameObject usedModels;
+
+    public GameObject usedModel;
 
     private RawImage modelThumbnail;
     private TextMeshProUGUI modelName;
     private TextMeshProUGUI modelAuthor;
 
-    void Start()
+    void Awake()
     {
         modelThumbnail = GetComponent<RawImage>();
         modelName = transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
@@ -23,13 +27,12 @@ public class ModelThumbnail : MonoBehaviour
         SetEmpty();
     }
 
-    public void SetPolyModel(PolyAsset pa)
+    public void SetPolyModel(PolyAsset polyAsset)
     {
-        polyModel = pa;
-
-        modelName.SetText(polyModel.displayName);
-        modelAuthor.SetText(polyModel.authorName);
-        PolyApi.FetchThumbnail(polyModel, SetThumbnail);
+        this.polyAsset = polyAsset;
+        modelName.SetText(polyAsset.displayName);
+        modelAuthor.SetText(polyAsset.authorName);
+        PolyApi.FetchThumbnail(polyAsset, SetThumbnail);
 
         SetFilled();
     }
@@ -59,11 +62,18 @@ public class ModelThumbnail : MonoBehaviour
 
         modelName.SetText("");
         modelAuthor.SetText("");
+        usedModel = null;
     }
 
     public void _OnClick()
     {
         modelPreview.SetActive(true);
-        modelPreview.GetComponent<ModelPreview>().Initialize(polyModel);
+        modelPreview.GetComponent<ModelPreview>().Initialize(polyAsset);
+    }
+
+    public void _OnClickUsedModel()
+    {
+        modelManager.SelectModel(usedModel);
+        usedModels.SetActive(false);
     }
 }
