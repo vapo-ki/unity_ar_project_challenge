@@ -72,5 +72,6 @@ public class ModelPreview : MonoBehaviour
         modelManager.AddModel(result, asset);
         menu.SetActive(false);
         transform.gameObject.SetActive(false);
+        controller.SetUnlocked();
     }
 }

@@ -12,6 +12,7 @@ public class Model : MonoBehaviour
     public Material selectedMaterial;
     public ModelManager modelManager;
     public string id;
+    public Controller controller;
 
     private bool isSelected;
 
@@ -35,10 +36,14 @@ public class Model : MonoBehaviour
 
     private void OnMouseUp()
     {
-        if (EventSystem.current.IsPointerOverGameObject(0) == false)
+        if (!controller.isUnlocked)
         {
-            modelManager.SelectModel(gameObject);
+            if (EventSystem.current.IsPointerOverGameObject(0) == false)
+            {
+                modelManager.SelectModel(gameObject);
+            }
         }
+            
     }
 
 }

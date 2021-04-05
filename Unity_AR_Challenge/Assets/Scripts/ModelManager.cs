@@ -19,6 +19,7 @@ public class ModelManager : MonoBehaviour
         model.GetComponent<Model>().selectedMaterial = selectedMaterial;
         model.GetComponent<Model>().modelManager = this;
         model.GetComponent<Model>().polyAsset = polyAsset;
+        model.GetComponent<Model>().controller = controller;
 
         polyModel.transform.SetParent(transform);
         SelectModel(model);
@@ -26,13 +27,16 @@ public class ModelManager : MonoBehaviour
 
     public void SelectModel(GameObject model)
     {
+        
         UnselectAll();
         model.GetComponent<Model>().SetSelected();
         controller.SelectModel(model);
+        
     }
 
     public void UnselectAll()
     {
+        controller.UnselectModel();
         foreach (Transform child in transform) 
         {
             Model model = child.GetChild(0).GetComponent<Model>();

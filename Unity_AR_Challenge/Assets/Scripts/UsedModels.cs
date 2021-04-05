@@ -5,18 +5,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using TMPro;
 using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 using UnityEngine.UI;
 
 public class UsedModels : MonoBehaviour
 {
     public List<ModelThumbnail> modelPreviewList = new List<ModelThumbnail>();
     public GameObject modelContainer;
-
     public TextMeshProUGUI pageText;
     public TextMeshProUGUI noResultsText;
-
     public  List<PolyAsset> usedAssets = new List<PolyAsset>();
     public List<GameObject> usedModels = new List<GameObject>();
+
     private int page;
 
     private void Start()

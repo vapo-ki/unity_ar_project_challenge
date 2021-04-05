@@ -1,22 +1,72 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 public class Controller : MonoBehaviour
 {
     public GameObject selectedModelUI;
     public Button rotationSlider;
-
+    public ARRaycastManager arRayManager;
     public GameObject selectedModel;
+    public TextMeshProUGUI lockButtonText;
+    public ModelManager modelManager;
+
+    public bool isUnlocked;
     private float rotationSpeed = 10f;
     private float scaleSpeed = 25f;
+    private Pose pose;
+    private bool placement;
+
+    private void Start()
+    {
+        isUnlocked = true;
+    }
+    private void Update()
+    {
+        if (selectedModel != null && isUnlocked)
+        {
+            UpdateModelPosition();
+        }
+
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            if (EventSystem.current.IsPointerOverGameObject(0) == false && selectedModel != null && !isUnlocked)
+            {
+                modelManager.UnselectAll();
+            }
+        }
+    }
+
+    private void UpdateModelPosition()
+    {
+        Vector3 screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
+        List<ARRaycastHit> hits = new List<ARRaycastHit>();
+        arRayManager.Raycast(screenCenter, hits, TrackableType.Planes);
+
+        if (hits.Count > 0)
+        {
+            selectedModel.transform.position = hits[0].pose.position;
+        }
+
+    }
 
     public void SelectModel(GameObject model)
     {
         selectedModel = model;
         selectedModelUI.SetActive(true);
+
+    }
+
+    public void UnselectModel()
+    {
+        selectedModel = null;
+        selectedModelUI.SetActive(false);
     }
 
 
@@ -37,6 +87,34 @@ public class Controller : MonoBehaviour
 
             Vector3 scaleVector = selectedModel.transform.localScale;
             selectedModel.transform.localScale = new Vector3(scaleVector.x + scale, scaleVector.y + scale, scaleVector.z + scale);
+        }
+    }
+
+    public void SetLocked()
+    {
+        isUnlocked = false;
+        lockButtonText.SetText("Unlock");
+        modelManager.UnselectAll();
+    }
+
+    public void SetUnlocked()
+    {
+        isUnlocked = true;
+        lockButtonText.SetText("Lock");
+    }
+
+    public void _OnToggleLock()
+    {
+        if (selectedModel != null)
+        {
+            if (isUnlocked)
+            {
+                SetLocked();
+            }
+            else
+            {
+                SetUnlocked();
+            }
         }
     }
 }
