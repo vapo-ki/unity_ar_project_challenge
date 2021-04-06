@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -20,20 +18,21 @@ public class Controller : MonoBehaviour
     public bool isUnlocked;
     private float rotationSpeed = 10f;
     private float scaleSpeed = 25f;
-    private Pose pose;
-    private bool placement;
 
     private void Start()
     {
         isUnlocked = true;
     }
+
     private void Update()
     {
+        // If movement is unlocked and a model has been selected update its position 
         if (selectedModel != null && isUnlocked)
         {
             UpdateModelPosition();
         }
 
+        // If nothing is touched unselect all
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             if (EventSystem.current.IsPointerOverGameObject(0) == false && selectedModel != null && !isUnlocked)
@@ -45,6 +44,7 @@ public class Controller : MonoBehaviour
 
     private void UpdateModelPosition()
     {
+        //Update Position to the center of where the phone is pointing too
         Vector3 screenCenter = Camera.current.ViewportToScreenPoint(new Vector3(0.5f, 0.5f));
         List<ARRaycastHit> hits = new List<ARRaycastHit>();
         arRayManager.Raycast(screenCenter, hits, TrackableType.Planes);
@@ -101,6 +101,15 @@ public class Controller : MonoBehaviour
     {
         isUnlocked = true;
         lockButtonText.SetText("Lock");
+    }
+
+
+    // Buttons
+
+    public void _OnDelete()
+    {
+        Destroy(selectedModel);
+        modelManager.UnselectAll();
     }
 
     public void _OnToggleLock()

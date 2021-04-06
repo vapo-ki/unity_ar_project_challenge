@@ -1,23 +1,20 @@
 ﻿using PolyToolkit;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class Model : MonoBehaviour
 {
+    public ModelManager modelManager;
+    public Controller controller;
+
     public PolyAsset polyAsset;
     public Material selectedMaterial;
-    public ModelManager modelManager;
-    public string id;
-    public Controller controller;
 
     private bool isSelected;
 
     public void SetSelected()
     {
+        //Set selected and give model a new material
         isSelected = true;
         Material[] materialList = new Material[2];
         materialList[0] = GetComponent<MeshRenderer>().materials[0];

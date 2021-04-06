@@ -1,8 +1,5 @@
 ﻿using PolyToolkit;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,7 +8,6 @@ public class Menu : MonoBehaviour
 {
     public List<ModelThumbnail> modelPreviewList = new List<ModelThumbnail>();
     public TMP_InputField searchBar;
-
     public TextMeshProUGUI pageText;
     public GameObject filterMenu;
     public Toggle curatedToggle;
@@ -45,10 +41,10 @@ public class Menu : MonoBehaviour
 
     private void LoadModels(PolyStatusOr<PolyListAssetsResult> result)
     {
+        //If there is no error, save the returned assets
         if (!result.Ok)
         {
-            print("Search Error.");
-            Debug.Log(result.Status.errorMessage);
+            Debug.Log("Search Error." + result.Status.errorMessage);
             return;
         }
 
@@ -58,8 +54,8 @@ public class Menu : MonoBehaviour
 
     private void Refresh()
     {
+        // Place a model into each modelThumbnail
         var count = 0;
-
         foreach (ModelThumbnail modelPreview in modelPreviewList)
         {
             if ((count + (page * 6)) <= searchResults.Count-1)
@@ -72,6 +68,7 @@ public class Menu : MonoBehaviour
 }
         }
 
+        // If no model was found, display the noResultsText field
         if (searchResults.Count == 0)
         {
             noResultsText.gameObject.SetActive(true);
@@ -80,6 +77,9 @@ public class Menu : MonoBehaviour
             noResultsText.gameObject.SetActive(false);
         }
     }
+
+
+    // Buttons
 
     public void _OnNextPageButton()
     {
@@ -114,7 +114,12 @@ public class Menu : MonoBehaviour
 
     public void _OnOpenMenu()
     {
-        transform.gameObject.SetActive(true);
+        gameObject.SetActive(true);
+    }
+
+    public void _OnExitMenu()
+    {
+        gameObject.SetActive(false);
     }
 
     //Filters
@@ -190,8 +195,6 @@ public class Menu : MonoBehaviour
                 req.orderBy = PolyOrderBy.BEST; break;
             case 1:
                 req.orderBy = PolyOrderBy.NEWEST; break;
-            case 2:
-                req.orderBy = PolyOrderBy.OLDEST; break;
         }
         filterMenu.SetActive(false);
     }

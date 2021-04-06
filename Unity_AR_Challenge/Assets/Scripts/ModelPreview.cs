@@ -1,7 +1,4 @@
 ﻿using PolyToolkit;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,11 +20,10 @@ public class ModelPreview : MonoBehaviour
     public ModelManager modelManager;
 
 
-
     public void Initialize(PolyAsset pa)
     {
+        // Display all information about the model
         polyModel = pa;
-
         modelName.SetText(pa.displayName);
         author.SetText(pa.authorName);
         complexity.SetText("Tris: " + pa.formats[0].formatComplexity.triangleCount.ToString());
@@ -37,41 +33,42 @@ public class ModelPreview : MonoBehaviour
         PolyApi.FetchThumbnail(pa, SetThumbnail);
     }
 
-    private void Update()
-    {
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            print("Back!");
-        }
-    }
-
     private void SetThumbnail(PolyAsset asset, PolyStatus status)
     {
         if (!status.ok)
         {
-            // Handle error;
+            Debug.Log("Fetching Thumbnail Error: " + status.errorMessage);
             return;
         }
 
         modelThumbnail.texture = asset.thumbnailTexture;
     }
 
-    public void _OnAddModelToScene()
-    {
-        PolyApi.Import(polyModel, PolyImportOptions.Default(), AddModel);
-    }
-
     private void AddModel(PolyAsset asset, PolyStatusOr<PolyImportResult> result)
     {
         if (!result.Ok)
         {
-            // Handle error.
+            Debug.Log("Importing Model Error: " + result.Status.errorMessage);
             return;
         }
 
+        // Add model and set menus to inactive
         modelManager.AddModel(result, asset);
         menu.SetActive(false);
         transform.gameObject.SetActive(false);
         controller.SetUnlocked();
+    }
+
+    
+    // Buttons
+
+    public void _OnAddModelToScene()
+    {
+        PolyApi.Import(polyModel, PolyImportOptions.Default(), AddModel);
+    }
+    
+    public void _OnExitPreview()
+    {
+        gameObject.SetActive(false);
     }
 }

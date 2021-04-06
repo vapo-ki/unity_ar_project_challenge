@@ -7,13 +7,11 @@ public class ModelThumbnail : MonoBehaviour
 {
     public GameObject modelPreview;
     public ModelManager modelManager;
-
     public Texture2D modelPreviewTexture;
     public bool isEmpty;
     public PolyAsset polyAsset;
-    public GameObject usedModels;
-
-    public GameObject usedModel;
+    public GameObject usedModels; //The usedModels menu
+    public GameObject usedModel; //The actual used model
 
     private RawImage modelThumbnail;
     private TextMeshProUGUI modelName;
@@ -29,6 +27,7 @@ public class ModelThumbnail : MonoBehaviour
 
     public void SetPolyModel(PolyAsset polyAsset)
     {
+        // Set the text and gather the information that is to be displayed
         this.polyAsset = polyAsset;
         modelName.SetText(polyAsset.displayName);
         modelAuthor.SetText(polyAsset.authorName);
@@ -41,7 +40,7 @@ public class ModelThumbnail : MonoBehaviour
     {
         if (!status.ok)
         {
-            // Handle error;
+            Debug.Log("Fetching Thumbnail Error: " + status.errorMessage);
             return;
         }
 
@@ -50,12 +49,14 @@ public class ModelThumbnail : MonoBehaviour
 
     private void SetFilled()
     {
+        // Change color to solid
         isEmpty = false;
         modelThumbnail.color = new Color(255, 255, 255, 255);
     }
 
     public void SetEmpty()
     {
+        // Change color to transparent and reset all values to null
         isEmpty = true;
         modelThumbnail.color = new Color(255, 255, 255, 0);
         modelThumbnail.texture = null;

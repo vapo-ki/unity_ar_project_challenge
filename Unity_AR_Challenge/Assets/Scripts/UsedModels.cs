@@ -1,21 +1,16 @@
 ﻿using PolyToolkit;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using TMPro;
 using UnityEngine;
-using UnityEngine.XR.ARFoundation;
-using UnityEngine.XR.ARSubsystems;
-using UnityEngine.UI;
 
 public class UsedModels : MonoBehaviour
 {
-    public List<ModelThumbnail> modelPreviewList = new List<ModelThumbnail>();
     public GameObject modelContainer;
     public TextMeshProUGUI pageText;
     public TextMeshProUGUI noResultsText;
-    public  List<PolyAsset> usedAssets = new List<PolyAsset>();
+
+    public List<ModelThumbnail> modelPreviewList = new List<ModelThumbnail>();
+    public List<PolyAsset> usedAssets = new List<PolyAsset>();
     public List<GameObject> usedModels = new List<GameObject>();
 
     private int page;
@@ -27,17 +22,10 @@ public class UsedModels : MonoBehaviour
 
     }
 
-    public void _OnOpenUsedModelsMenu()
-    {
-        gameObject.SetActive(true);
-        usedAssets = new List<PolyAsset>();
-        usedModels = new List<GameObject>();
-        LoadModels();
-    }
-
     private void LoadModels()
     {
-        foreach(Transform child in modelContainer.transform)
+        //Add all models that are loaded in the scene into the list
+        foreach (Transform child in modelContainer.transform)
         {
             Model model = child.GetChild(0).GetComponent<Model>();
             usedAssets.Add(model.polyAsset);
@@ -50,6 +38,7 @@ public class UsedModels : MonoBehaviour
 
     private void Refresh()
     {
+        //If there are any models loaded in, pass them into the designated thumbnail slot
         if (usedAssets.Count == 0)
         {
             noResultsText.gameObject.SetActive(true);
@@ -73,8 +62,20 @@ public class UsedModels : MonoBehaviour
                     modelThumbnail.SetEmpty();
                 }
             }
-        }    
+        }
     }
+
+
+    // Buttons
+
+    public void _OnOpenUsedModelsMenu()
+    {
+        gameObject.SetActive(true);
+        usedAssets = new List<PolyAsset>();
+        usedModels = new List<GameObject>();
+        LoadModels();
+    }
+
     public void _OnNextPageButton()
     {
         if (((page + 1) * 6) <= (usedAssets.Count))
@@ -94,5 +95,10 @@ public class UsedModels : MonoBehaviour
             pageText.SetText((page + 1).ToString());
             Refresh();
         }
+    }
+
+    public void _OnCloseUsedModels()
+    {
+        gameObject.SetActive(false);
     }
 }

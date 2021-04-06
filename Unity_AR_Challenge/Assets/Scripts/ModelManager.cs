@@ -1,6 +1,4 @@
 ﻿using PolyToolkit;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ModelManager : MonoBehaviour
@@ -10,6 +8,8 @@ public class ModelManager : MonoBehaviour
 
     public void AddModel(PolyStatusOr<PolyImportResult> result, PolyAsset polyAsset)
     {
+        //Take take the child (actual model) of the imported gameobject (container) and prepare it, then add them to the ModelContainer as a child
+
         GameObject polyModel = result.Value.gameObject;
         GameObject model = polyModel.transform.GetChild(0).gameObject;
 
@@ -27,11 +27,11 @@ public class ModelManager : MonoBehaviour
 
     public void SelectModel(GameObject model)
     {
-        
+        //Unselect all, then select the wanted model
         UnselectAll();
+
         model.GetComponent<Model>().SetSelected();
         controller.SelectModel(model);
-        
     }
 
     public void UnselectAll()

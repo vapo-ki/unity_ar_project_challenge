@@ -1,22 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.EventSystems;
+﻿using UnityEngine;
 
 public class ScaleSlider : MonoBehaviour
 {
     public Controller controller;
 
     private bool isDragging;
-    public void _OnDragStart()
-    {
-        isDragging = true;
-    }
-
-    public void _OnDragEnd()
-    {
-        isDragging = false;
-    }
 
     private void Update()
     {
@@ -27,5 +15,18 @@ public class ScaleSlider : MonoBehaviour
                 controller.ScaleModel(touch.deltaPosition.y);
             }
         }
+    }
+
+
+    // Buttons
+
+    public void _OnDragStart()
+    {
+        isDragging = true;
+    }
+
+    public void _OnDragEnd()
+    {
+        isDragging = false;
     }
 }
