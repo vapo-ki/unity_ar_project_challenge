@@ -74,7 +74,11 @@ public class ModelThumbnail : MonoBehaviour
 
     public void _OnClickUsedModel()
     {
-        modelManager.SelectModel(usedModel);
-        usedModels.SetActive(false);
+        if (!isEmpty)
+        {
+            modelManager.SelectModel(usedModel);
+            usedModels.SetActive(false);
+        }
+        
     }
 }

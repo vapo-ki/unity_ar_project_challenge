@@ -33,6 +33,8 @@ public class UsedModels : MonoBehaviour
             usedModels.Add(child.GetChild(0).gameObject);
         }
 
+        print(usedAssets.Count);
+
         Refresh();
     }
 
@@ -42,6 +44,10 @@ public class UsedModels : MonoBehaviour
         if (usedAssets.Count == 0)
         {
             noResultsText.gameObject.SetActive(true);
+            foreach (ModelThumbnail modelThumbnail in modelPreviewList)
+            {
+                modelThumbnail.SetEmpty();
+            }
         }
         else
         {

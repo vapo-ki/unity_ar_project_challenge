@@ -51,7 +51,7 @@ public class Controller : MonoBehaviour
 
         if (hits.Count > 0)
         {
-            selectedModel.transform.position = hits[0].pose.position;
+            selectedModel.transform.parent.transform.position = hits[0].pose.position;
         }
 
     }
@@ -75,7 +75,7 @@ public class Controller : MonoBehaviour
         if (selectedModel != null)
         {
             float rotation = touchDeltaX * rotationSpeed * Mathf.Deg2Rad;
-            selectedModel.transform.Rotate(Vector3.up, -rotation);
+            selectedModel.transform.parent.transform.Rotate(Vector3.up, -rotation);
         }
     }
 
@@ -85,8 +85,8 @@ public class Controller : MonoBehaviour
         {
             float scale = touchDeltaY / scaleSpeed;
 
-            Vector3 scaleVector = selectedModel.transform.localScale;
-            selectedModel.transform.localScale = new Vector3(scaleVector.x + scale, scaleVector.y + scale, scaleVector.z + scale);
+            Vector3 scaleVector = selectedModel.transform.parent.transform.localScale;
+            selectedModel.transform.parent.transform.localScale = new Vector3(scaleVector.x + scale, scaleVector.y + scale, scaleVector.z + scale);
         }
     }
 
@@ -108,7 +108,7 @@ public class Controller : MonoBehaviour
 
     public void _OnDelete()
     {
-        Destroy(selectedModel);
+        Destroy(selectedModel.transform.parent.gameObject);
         modelManager.UnselectAll();
     }
 

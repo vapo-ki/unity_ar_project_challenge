@@ -29,7 +29,7 @@ public class ModelManager : MonoBehaviour
     {
         //Unselect all, then select the wanted model
         UnselectAll();
-
+        print(model.name);
         model.GetComponent<Model>().SetSelected();
         controller.SelectModel(model);
     }
